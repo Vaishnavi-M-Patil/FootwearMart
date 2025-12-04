@@ -1,33 +1,51 @@
 # Deployment of FootwearMart React app on ubuntu instance
-## Install Docker and Docker Compose.
+### Install Docker and Docker Compose.
 ```
 sudo apt install docker.io -y
 sudo apt install docker-compose-v2 -y
 sudo usermod -aG docker $USER && newgrp docker
 ```
-## Build Dockerfile
+### Build Docker image of your project
 ```
 docker build -t react-app .
 ```
 ```
 docker images
 ```
+
+### Create container of that image.
+```
 docker run -d -p 8080:80 --name react-app-cont react-app:latest
-
+```
+```
 docker ps
+```
 
+### Change name of the image and push image on Dockerhub.
+```
 docker tag react-app:latest vaishnavimpatil/footwearmart-react-app:latest
-
+```
+```
 docker push vaishnavimpatil/footwearmart-react-app:latest 
+```
 
+### Use custom domain for application 
 1. Create one hosted zone for your domain and edit nameserver names in your domain provider's dns configuration. (It will take some time to change nameservers)
-2. Now map your server with domain by using route 53 records.
+2. Now map your server IP with domain by using route 53 records.
 ![hosted zone records](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/Screenshot%202025-12-04%20003106.png)
-sudo apt update
 
+### Install nginx to forward traffic to your react app
+```
+sudo apt update
+```
+```
 sudo apt install nginx -y
- 
+```
+### Create site file
+```
 sudo vim /etc/nginx/sites-available/free-domain.shop
+```
+```bash
 server {
 
 server_name www.free-domain.shop free-domain.shop;
@@ -38,12 +56,23 @@ location / {
         proxy_set_header X-Real-IP $remote_addr;
 }
 }
-
+```
+### Create soft link of the site file.
+```
  sudo ln -s /etc/nginx/sites-available/free-domain.shop /etc/nginx/sites-enabled/
-
+```
+### Test nginx and reload nginx deamon
+```
  sudo nginx -t
+```
+```
 sudo systemctl reload nginx
+```
 
+### Install certbot and create ssl certificate for the domain.
+```
 sudo apt install certbot python3-certbot-nginx -y
-
+```
+```
 sudo certbot --nginx -d free-domain.shop -d www.free-domain.shop --email vaishnavipatil6002@gmail.com
+```
