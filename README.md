@@ -29,6 +29,11 @@ docker tag react-app:latest vaishnavimpatil/footwearmart-react-app:latest
 docker push vaishnavimpatil/footwearmart-react-app:latest 
 ```
 
+### Run docker compose file
+```
+docker compose up -d
+```
+
 ### Use custom domain for application 
 1. Create one hosted zone for your domain and edit nameserver names in your domain provider's dns configuration. (It will take some time to change nameservers)
 2. Now map your server IP with domain by using route 53 records.
