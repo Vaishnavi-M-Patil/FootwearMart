@@ -1,4 +1,21 @@
 # Deployment of FootwearMart React app on ubuntu instance
+### To run application directly on server
+```
+sudo apt install nodejs npm -y
+```
+```
+sudo npm install pm2@latest -g
+```
+```
+sudo -u ubuntu pm2 save
+```
+```
+sudo -u ubuntu pm2 startup
+```
+```
+pm2 start npm --name FootwearMart -- start
+```
+
 ### Install Docker and Docker Compose.
 ```
 sudo apt install docker.io -y
@@ -78,6 +95,7 @@ sudo systemctl reload nginx
 ```
 sudo apt install certbot python3-certbot-nginx -y
 ```
+- **`Note`**: SSL certificate issuance will fail if your domain is not properly mapped to the server. So please ensure your application is accessible by your domain.
 ```
 sudo certbot --nginx -d free-domain.shop -d www.free-domain.shop --email vaishnavipatil6002@gmail.com
 ```
