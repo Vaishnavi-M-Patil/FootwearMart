@@ -1,11 +1,17 @@
+# Deployment of FootwearMart React app on ubuntu instance
+## Install Docker and Docker Compose.
+```
 sudo apt install docker.io -y
 sudo apt install docker-compose-v2 -y
 sudo usermod -aG docker $USER && newgrp docker
-
+```
+## Build Dockerfile
+```
 docker build -t react-app .
-
+```
+```
 docker images
-
+```
 docker run -d -p 8080:80 --name react-app-cont react-app:latest
 
 docker ps
