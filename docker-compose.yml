@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  react-app:
+    container_name: 'Footmart-app'
+    image: 'vaishnavimpatil/footwearmart-react-app'
+    ports:
+    - '8080:80'
