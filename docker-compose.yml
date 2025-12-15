@@ -3,6 +3,18 @@ version: '3.8'
 services:
   react-app:
     container_name: 'Footmart-app'
-    image: 'vaishnavimpatil/footwearmart-react-app'
+    image: 'react'
     ports:
-    - '8080:80'
+      - '3000:3000'  
+
+  prometheus:
+    image: prom/prometheus
+    container_name: 'prometheus'
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml    
+
+
+
+
