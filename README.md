@@ -99,3 +99,10 @@ sudo apt install certbot python3-certbot-nginx -y
 ```
 sudo certbot --nginx -d free-domain.shop -d www.free-domain.shop --email vaishnavipatil6002@gmail.com
 ```
+
+## Grafana Setup
+- Grafana: `http://localhost:3001` (user:`admin`/ password: `admin`)
+- Connections → Add data source → Prometheus
+- URL: `http://prometheus:9090`
+- Save & test
+- Create dashboard → Query: rate(http_requests_total[5m])
