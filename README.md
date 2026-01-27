@@ -1,20 +1,8 @@
-# Deployment of FootwearMart React app on ubuntu instance
-### To run application directly on server
-```
-sudo apt install nodejs npm -y
-```
-```
-sudo npm install pm2@latest -g
-```
-```
-sudo -u ubuntu pm2 save
-```
-```
-sudo -u ubuntu pm2 startup
-```
-```
-pm2 start npm --name FootwearMart -- start
-```
+# Deploying FootwearMart React App with Docker
+## Prerequisites
+- Ubuntu server with Docker installed
+- DockerHub account (vaishnavimpatil)
+- Domain name with Route 53 access
 
 ### Install Docker and Docker Compose.
 ```
@@ -22,6 +10,7 @@ sudo apt install docker.io -y
 sudo apt install docker-compose-v2 -y
 sudo usermod -aG docker $USER && newgrp docker
 ```
+
 ### Build Docker image of your project
 ```
 docker build -t react-app .
@@ -51,6 +40,7 @@ docker push vaishnavimpatil/footwearmart-react-app:latest
 docker compose up -d
 ```
 
+
 ### Use custom domain for application 
 1. Create one hosted zone for your domain and edit nameserver names in your domain provider's dns configuration. (It will take some time to change nameservers)
 2. Now map your server IP with domain by using route 53 records.
@@ -73,7 +63,7 @@ server {
 server_name www.free-domain.shop free-domain.shop;
 
 location / {
-        proxy_pass http://localhost:8080;
+        proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
 }
@@ -100,7 +90,46 @@ sudo apt install certbot python3-certbot-nginx -y
 sudo certbot --nginx -d free-domain.shop -d www.free-domain.shop --email vaishnavipatil6002@gmail.com
 ```
 
-## Grafana Setup
+## Monitoring Setup
+---
+### Prometheus
+#### Add prom-client
+**What is Prom-client?**  
+- Prom-client is the Prometheus client library for Node.js or react app.  
+- React servers don't expose `/metrics` by default So Prom-client instruments your app to expose `metrics` in Prometheus format.
+- Creates `HTTP endpoint` (/metrics) that Prometheus scrapes.
+
+##### Setup of Prom-client 
+1. Install prom-client
+```
+npm install prom-client
+```
+2. Add to your React app (server.js)
+```
+const promClient = require('prom-client');
+
+// Default metrics (always available)
+const register = new promClient.Registry();
+promClient.collectDefaultMetrics({ register });
+
+// Custom counter
+const requests = new promClient.Counter({
+  name: 'http_requests_total',
+  help: 'Total HTTP requests',
+  labelNames: ['method', 'route', 'status']
+});
+register.registerMetric(requests);
+
+// Create /metrics route and throw all metrics on it
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', promClient.register.contentType);
+  res.end(await register.metrics());
+});
+```
+3. Create Prometheus Configuration file.
+4. Add prometheus service in docker compose.
+
+### Grafana
 - Grafana: `http://localhost:3001` (user:`admin`/ password: `admin`)
 - Connections → Add data source → Prometheus
 - URL: `http://prometheus:9090`
