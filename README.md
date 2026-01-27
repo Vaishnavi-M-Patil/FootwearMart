@@ -136,7 +136,7 @@ app.get('/metrics', async (req, res) => {
 - Connections → Add data source → Prometheus
 - URL: `http://prometheus:9090`
 - Save & test
-- Import nodejs deshboard -> Search on google "Grafana nodejs dashboard" -> copy dashboard ID -> import dashboard -> paste id and load dashboard -> click load -> add visualization in current nodejs dashboard -> select etrics "http_requests_total" -> select label "route" -> values "/metrics" -> RUN queries -> change title of panel and save the dashboard
+- Import nodejs deshboard -> Search on google "Grafana nodejs dashboard" -> copy dashboard ID -> import dashboard -> paste id(11159) and load dashboard -> click load -> add visualization in current nodejs dashboard -> select etrics "http_requests_total" -> select label "route" -> values "/metrics" -> RUN queries -> change title of panel and save the dashboard
 
 
 ![Dashboard](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/metrics1.png)
