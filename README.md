@@ -129,9 +129,14 @@ app.get('/metrics', async (req, res) => {
 3. Create Prometheus Configuration file.
 4. Add prometheus service in docker compose.
 
+![targets](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/image.png)
+
 ### Grafana
 - Grafana: `http://localhost:3001` (user:`admin`/ password: `admin`)
 - Connections → Add data source → Prometheus
 - URL: `http://prometheus:9090`
 - Save & test
-- Create dashboard → Query: rate(http_requests_total[5m])
+- Import nodejs deshboard -> Search on google "Grafana nodejs dashboard" -> copy dashboard ID -> import dashboard -> paste id and load dashboard -> click load -> add visualization in current nodejs dashboard -> select etrics "http_requests_total" -> select label "route" -> values "/metrics" -> RUN queries -> change title of panel and save the dashboard
+![Dashboard](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/metrics1.png)
+![Dashboard](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/metrics1.png)
+![Dashboard](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/metrics1.png)
