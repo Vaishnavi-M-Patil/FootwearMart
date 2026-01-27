@@ -89,6 +89,8 @@ sudo apt install certbot python3-certbot-nginx -y
 ```
 sudo certbot --nginx -d free-domain.shop -d www.free-domain.shop --email vaishnavipatil6002@gmail.com
 ```
+![App](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/app.png)
+
 
 ## Monitoring Setup
 ---
