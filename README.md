@@ -144,3 +144,39 @@ app.get('/metrics', async (req, res) => {
 ![Dashboard](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/metrics1.png)
 ![Dashboard](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/metrics2.png)
 ![Dashboard](https://github.com/Vaishnavi-M-Patil/FootwearMart/blob/main/assets/metrics3.png)
+
+---
+
+## Jenkins CI/CD Pipeline for React application 
+- Configure Jenkins server.
+- Add `jenkins` user in docker group.
+```
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
+newgrp docker
+```
+- Install Plugins on Jenkins: Git, Pipeline, Pipeline:Groovy libraries, Docker Pipeline
+- Create a New Pipeline Job in Jenkins UI.
+- Use this Pipeline Script example:
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Vaishnavi-M-Patil/FootwearMart.git' 
+            }
+        }
+        stage('Deploy Using Docker Compose') {
+            steps {
+                   sh 'docker compose down || true'
+                   sh 'docker compose up -d'
+                   sh 'sleep 10'  // Wait for startup
+                   sh 'docker compose ps'  // Verify running
+            }
+        }
+    }
+}
+```
+- Save the pipeline and click Build.
