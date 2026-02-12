@@ -149,6 +149,7 @@ app.get('/metrics', async (req, res) => {
 
 ## Jenkins CI/CD Pipeline for React application 
 - Configure Jenkins server.
+- Also Launch new ec2 instance for footmart app deployment and allow ssh only to jenkins server and also allow port 3000,3001,9090 in security group
 - Install Plugins on Jenkins: Git, Pipeline, Pipeline:Groovy libraries, Docker Pipeline, Ansible, SSH build agents
 - add node in jenkins UI settings -> nodes -> name(Footmart) -> Remote root directory (/home/ubuntu) -> Labels (FootMart-server) -> Launch method (ssh) -> host (Ip_address-of footmart server) -> Credentials (ubuntu) -> Host Key Verification Strategy (non verifying) -> save
 - Create a New Pipeline Job in Jenkins UI.
