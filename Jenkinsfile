@@ -1,7 +1,15 @@
 pipeline {
-    agent any
+    agent { label 'FootMart-server' }  // Runs ENTIRE pipeline on footmart node
 
     stages {
+        stage('Clone Repository') {
+            steps {
+                ansiblePlaybook(
+                    playbook: 'Install_pkgs_on_host.yml',
+                    inventory: 'hosts.ini'
+                )
+            }
+        }
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/Vaishnavi-M-Patil/FootwearMart.git' 
