@@ -2,7 +2,7 @@ pipeline {
     agent { label 'FootMart-server' }  // Runs ENTIRE pipeline on footmart node
 
     stages {
-        stage('Clone Repository') {
+        stage('Install Packages using ansible') {
             steps {
                 ansiblePlaybook(
                     playbook: 'Install_pkgs_on_host.yml',
