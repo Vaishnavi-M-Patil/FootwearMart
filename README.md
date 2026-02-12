@@ -149,34 +149,52 @@ app.get('/metrics', async (req, res) => {
 
 ## Jenkins CI/CD Pipeline for React application 
 - Configure Jenkins server.
-- Add `jenkins` user in docker group.
-```
-sudo usermod -aG docker jenkins
-sudo systemctl restart jenkins
-newgrp docker
-```
-- Install Plugins on Jenkins: Git, Pipeline, Pipeline:Groovy libraries, Docker Pipeline
+- Install Plugins on Jenkins: Git, Pipeline, Pipeline:Groovy libraries, Docker Pipeline, Ansible, SSH build agents
+- add node in jenkins UI settings -> nodes -> name(Footmart) -> Remote root directory (/home/ubuntu) -> Labels (FootMart-server) -> Launch method (ssh) -> host (Ip_address-of footmart server) -> Credentials (ubuntu) -> Host Key Verification Strategy (non verifying) -> save
 - Create a New Pipeline Job in Jenkins UI.
+- on Jenkins server add private key in `/var/lib/jenkins/.ssh/` and change user, group owner and permissions of the key.
+```
+sudo cp /home/ubuntu/id_rsa /var/lib/jenkins/.ssh/id_rsa
+sudo chown jenkins:jenkins /var/lib/jenkins/.ssh/id_rsa
+sudo chmod 600 /var/lib/jenkins/.ssh/id_rsa
+```
 - Use this Pipeline Script example:
 ```
 pipeline {
-    agent any
+    agent none
 
     stages {
-        stage('Clone Repository') {
+        stage('Install Packages using ansible') {
+            agent { label 'built-in' }
             steps {
-                git branch: 'main', url: 'https://github.com/Vaishnavi-M-Patil/FootwearMart.git' 
+                ansiblePlaybook(
+                    playbook: 'Install_pkgs_on_host.yml',
+                    inventory: 'hosts.ini'
+                )
             }
         }
-        stage('Deploy Using Docker Compose') {
+        
+        stage('Clone Repository') {
+            agent { label 'FootMart-server' }
             steps {
-                   sh 'docker compose down || true'
-                   sh 'docker compose up -d'
-                   sh 'sleep 10'  // Wait for startup
-                   sh 'docker compose ps'  // Verify running
+                git branch: 'main', url: 'https://github.com/Vaishnavi-M-Patil/FootwearMart.git'
+            }
+        }
+        
+        stage('Deploy Using Docker Compose') {
+            agent { label 'FootMart-server' }
+            steps {
+                sh '''
+                    docker-compose down || true
+                    docker-compose up -d
+                    sleep 10
+                    docker-compose ps
+                    echo "✅ FootwearMart deployed! Check http://54.242.228.167:8080"
+                '''
             }
         }
     }
 }
 ```
+
 - Save the pipeline and click Build.
