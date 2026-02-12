@@ -12,3 +12,9 @@
         groups: docker
         append: yes
       become: yes
+
+     - name: Install Docker Compose via apt
+      apt:
+        name: docker-compose-plugin
+        state: present
+      become: yes
