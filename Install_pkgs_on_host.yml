@@ -1,21 +1,23 @@
+---
 - hosts: appserver
+  become: yes
   tasks:
-    - name: Ensure Docker installed
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
       apt:
         name: docker.io
         state: present
-      become: yes
+
+    - name: Install Docker Compose plugin
+      apt:
+        name: docker-compose-plugin
+        state: present
 
     - name: Add ubuntu to docker group
       user:
         name: ubuntu
         groups: docker
         append: yes
-      become: yes
-
-     - name: Install Docker Compose via apt
-      apt:
-        name: docker-compose-plugin
-        state: present
-      become: yes
-      
