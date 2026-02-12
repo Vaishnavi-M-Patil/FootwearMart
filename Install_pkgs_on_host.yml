@@ -11,11 +11,16 @@
         name: docker.io
         state: present
 
-    - name: Install Docker Compose plugin
-      apt:
-        name: docker-compose-plugin
-        state: present
+     - name: Install Docker Compose (v2 plugin)
+      shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
+      args:
+        creates: /usr/local/bin/docker-compose
 
+    - name: Make Docker Compose executable
+      file:
+        path: /usr/local/bin/docker-compose
+        mode: '0755'
+        
     - name: Add ubuntu to docker group
       user:
         name: ubuntu
